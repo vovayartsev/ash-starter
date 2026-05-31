@@ -22,10 +22,11 @@
     "target=/workspaces/flylixir/.claude,type=tmpfs"
   ],
 
-  "forwardPorts": [4000, 9121],
+  "forwardPorts": [4000, 9121, 24282],
   "portsAttributes": {
     "4000": { "label": "Phoenix", "onAutoForward": "notify" },
-    "9121": { "label": "mcp-supervisord", "onAutoForward": "silent" }
+    "9121": { "label": "mcp-supervisord", "onAutoForward": "silent" },
+    "24282": { "label": "Serena dashboard", "onAutoForward": "silent" }
   },
 
   "features": {

@@ -1,0 +1,4 @@
+dashboard:
+	open http://localhost:24282/dashboard/index.html
+
+

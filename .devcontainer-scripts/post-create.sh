@@ -6,7 +6,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 export PATH="$HOME/.local/bin:$PATH"
 
 echo "[post-create] installing serena (stdio MCP server) …"
-uv tool install --from git+https://github.com/oraios/serena serena || \
+uv tool install --from git+https://github.com/oraios/serena serena-agent || \
     echo "[post-create] serena install failed (continuing)"
 
 echo "[post-create] installing mcp-supervisord (editable) …"

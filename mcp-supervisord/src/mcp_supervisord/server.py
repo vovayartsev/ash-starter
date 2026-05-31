@@ -101,6 +101,11 @@ SUPERVISOR_TOOLS: list[types.Tool] = [
             "required": ["pid"],
         },
     ),
+    types.Tool(
+        name="restart_supervisor",
+        description="Gracefully stop all managed processes, reload tools.json from disk, restart with new config.",
+        inputSchema={"type": "object", "properties": {}},
+    ),
 ]
 
 SUPERVISOR_TOOL_NAMES = {t.name for t in SUPERVISOR_TOOLS}
@@ -111,8 +116,9 @@ def _json_content(value: Any) -> list[types.TextContent]:
 
 
 class Supervisor:
-    def __init__(self, config: SupervisorConfig) -> None:
+    def __init__(self, config: SupervisorConfig, config_path: str = "") -> None:
         self.config = config
+        self.config_path = config_path
         self.manager = ProcessManager(config)
         self.upstreams: dict[str, UpstreamMCP] = {
             name: UpstreamMCP(name, spec, config.log_buffer)
@@ -138,6 +144,20 @@ class Supervisor:
         for up in self.upstreams.values():
             await up.stop()
         await self.manager.shutdown_all()
+
+    async def reload(self) -> dict:
+        if not self.config_path:
+            return {"error": "config_path not set; cannot reload"}
+        await self.shutdown()
+        from .config import load_config
+        self.config = load_config(self.config_path)
+        self.manager = ProcessManager(self.config)
+        self.upstreams = {
+            name: UpstreamMCP(name, spec, self.config.log_buffer)
+            for name, spec in self.config.mcp_servers.items()
+        }
+        await self.autostart()
+        return {"reloaded": True, "config": self.config_path}
 
     # --- MCP server wiring ---
 
@@ -212,6 +232,8 @@ class Supervisor:
                 return await self.manager.wait(int(args["pid"]), float(args.get("timeout", 60)))
             if name == "kill":
                 return await self.manager.kill(int(args["pid"]), args.get("signal", "TERM"))
+            if name == "restart_supervisor":
+                return await self.reload()
         except KeyError as e:
             return {"error": str(e)}
         raise ValueError(f"unknown supervisor tool {name!r}")

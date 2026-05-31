@@ -24,7 +24,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.port:
         port = args.port
 
-    sup = Supervisor(cfg)
+    sup = Supervisor(cfg, config_path=args.config)
     app = sup.build_app()
     uvicorn.run(app, host=host, port=port, log_level="info")
     return 0

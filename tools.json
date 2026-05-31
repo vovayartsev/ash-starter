@@ -11,18 +11,9 @@
   "mcp_servers": {
     "serena": {
       "namespace": "serena",
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/oraios/serena",
-        "serena",
-        "start-mcp-server",
-        "--context",
-        "ide-assistant",
-        "--project",
-        "/workspaces/flylixir"
-      ],
-      "env": {},
+      "command": "serena",
+      "args": ["start-mcp-server", "--context", "ide-assistant", "--project", "/workspaces/flylixir", "--open-web-dashboard", "False"],
+      "env": {"PATH": "/home/vscode/.local/bin:/usr/local/bin:/usr/bin:/bin"},
       "cwd": "/workspaces/flylixir",
       "autostart": true,
       "restart_policy": {
