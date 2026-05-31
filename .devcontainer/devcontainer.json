@@ -1,0 +1,60 @@
+{
+  "name": "flylixir-phx",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+
+  "runArgs": ["--init"],
+
+  "containerEnv": {
+    "SUPERVISOR_TOKEN": "my-super-token",
+    "MIX_ENV": "dev",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8"
+  },
+
+  "remoteUser": "vscode",
+
+  "workspaceFolder": "/workspaces/phx",
+  "workspaceMount": "source=${localWorkspaceFolder}/phx,target=/workspaces/phx,type=bind,consistency=cached",
+
+  "mounts": [
+    "source=${localWorkspaceFolder}/mcp-supervisord,target=/opt/mcp-supervisord,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/tools.json,target=/etc/mcp-supervisord/tools.json,type=bind,readonly"
+  ],
+
+  "forwardPorts": [4000, 9121],
+  "portsAttributes": {
+    "4000": { "label": "Phoenix", "onAutoForward": "notify" },
+    "9121": { "label": "mcp-supervisord", "onAutoForward": "silent" }
+  },
+
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "username": "vscode",
+      "uid": "1000",
+      "gid": "1000",
+      "installZsh": true,
+      "configureZshAsDefaultShell": false
+    },
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+
+  "postCreateCommand": "bash /opt/mcp-supervisord/.devcontainer-scripts/post-create.sh",
+  "postStartCommand": "bash /opt/mcp-supervisord/.devcontainer-scripts/post-start.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "JakeBecker.elixir-ls",
+        "phoenixframework.phoenix",
+        "ms-python.python",
+        "charliermarsh.ruff"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "$comment": "mcp-supervisord config. See mcp-supervisord/README for full schema.",
+
+  "bind": "0.0.0.0:9121",
+  "auth": {
+    "token": "my-super-token"
+  },
+  "log_buffer": 1000,
+  "shutdown_grace_seconds": 10,
+
+  "mcp_servers": {
+    "serena": {
+      "namespace": "serena",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--context",
+        "ide-assistant",
+        "--project",
+        "/workspaces/phx"
+      ],
+      "env": {},
+      "cwd": "/workspaces/phx",
+      "autostart": true,
+      "restart_policy": {
+        "mode": "on-failure",
+        "max_restarts": 5,
+        "window_seconds": 60,
+        "backoff_seconds": 2
+      }
+    }
+  },
+
+  "named_tools": {
+    "server": {
+      "command": "mix phx.server",
+      "cwd": "/workspaces/phx",
+      "env": {
+        "MIX_ENV": "dev"
+      },
+      "autostart": false,
+      "restart_policy": {
+        "mode": "never"
+      }
+    }
+  }
+}
