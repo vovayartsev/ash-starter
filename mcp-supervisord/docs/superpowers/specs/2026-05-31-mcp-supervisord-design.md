@@ -53,7 +53,7 @@ Located at repo root. Loaded once at startup. `${VAR}` placeholders expanded fro
 ```json
 {
   "bind": "0.0.0.0:9121",
-  "auth": { "token": "${SUPERVISOR_TOKEN}" },
+  "auth": { "token": "...." },
   "log_buffer": 1000,
   "shutdown_grace_seconds": 10,
 
@@ -198,7 +198,6 @@ mcp-supervisord/
 - `postCreateCommand` adds: `uv tool install --editable ./mcp-supervisord` (so `mcp-supervisord` CLI is on PATH).
 - `postStartCommand`: `nohup mcp-supervisord --config /workspaces/flylixir/tools.json > /tmp/supervisord.log 2>&1 &`
 - `forwardPorts`: append `9121`.
-- `containerEnv`: `SUPERVISOR_TOKEN` (developer-supplied) so `tools.json` expansion works.
 
 Claude Desktop config (host) points to `http://localhost:9121/mcp?token=…`.
 

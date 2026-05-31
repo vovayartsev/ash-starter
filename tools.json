@@ -20,10 +20,10 @@
         "--context",
         "ide-assistant",
         "--project",
-        "/workspaces/phx"
+        "/workspaces/flylixir"
       ],
       "env": {},
-      "cwd": "/workspaces/phx",
+      "cwd": "/workspaces/flylixir",
       "autostart": true,
       "restart_policy": {
         "mode": "on-failure",
@@ -35,9 +35,9 @@
   },
 
   "named_tools": {
-    "server": {
+    "phx.server": {
       "command": "mix phx.server",
-      "cwd": "/workspaces/phx",
+      "cwd": "/workspaces/flylixir",
       "env": {
         "MIX_ENV": "dev"
       },

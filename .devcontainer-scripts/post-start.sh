@@ -13,7 +13,7 @@ if [ -f "$PID_FILE" ] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
 fi
 
 echo "[post-start] starting mcp-supervisord …"
-nohup mcp-supervisord --config /etc/mcp-supervisord/tools.json \
+nohup mcp-supervisord --config /workspaces/flylixir/tools.json \
     > "$LOG" 2>&1 &
 echo $! > "$PID_FILE"
 sleep 1

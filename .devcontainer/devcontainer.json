@@ -1,5 +1,5 @@
 {
-  "name": "flylixir-phx",
+  "name": "flylixir",
   "build": {
     "dockerfile": "Dockerfile",
     "context": ".."
@@ -8,7 +8,6 @@
   "runArgs": ["--init"],
 
   "containerEnv": {
-    "SUPERVISOR_TOKEN": "my-super-token",
     "MIX_ENV": "dev",
     "LANG": "C.UTF-8",
     "LC_ALL": "C.UTF-8"
@@ -16,12 +15,11 @@
 
   "remoteUser": "vscode",
 
-  "workspaceFolder": "/workspaces/phx",
-  "workspaceMount": "source=${localWorkspaceFolder}/phx,target=/workspaces/phx,type=bind,consistency=cached",
+  "workspaceFolder": "/workspaces/flylixir",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/flylixir,type=bind,consistency=cached",
 
   "mounts": [
-    "source=${localWorkspaceFolder}/mcp-supervisord,target=/opt/mcp-supervisord,type=bind,consistency=cached",
-    "source=${localWorkspaceFolder}/tools.json,target=/etc/mcp-supervisord/tools.json,type=bind,readonly"
+    "target=/workspaces/flylixir/.claude,type=tmpfs"
   ],
 
   "forwardPorts": [4000, 9121],
@@ -41,8 +39,8 @@
     "ghcr.io/devcontainers/features/git:1": {}
   },
 
-  "postCreateCommand": "bash /opt/mcp-supervisord/.devcontainer-scripts/post-create.sh",
-  "postStartCommand": "bash /opt/mcp-supervisord/.devcontainer-scripts/post-start.sh",
+  "postCreateCommand": "bash /workspaces/flylixir/.devcontainer-scripts/post-create.sh",
+  "postStartCommand": "bash /workspaces/flylixir/.devcontainer-scripts/post-start.sh",
 
   "customizations": {
     "vscode": {

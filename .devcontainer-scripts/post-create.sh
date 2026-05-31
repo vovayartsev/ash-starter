@@ -10,10 +10,10 @@ uv tool install --from git+https://github.com/oraios/serena serena || \
     echo "[post-create] serena install failed (continuing)"
 
 echo "[post-create] installing mcp-supervisord (editable) …"
-uv tool install --editable /opt/mcp-supervisord
+uv tool install --editable /workspaces/flylixir/mcp-supervisord
 
 echo "[post-create] mix deps …"
-cd /workspaces/phx
+cd /workspaces/flylixir
 if [ -f mix.exs ]; then
     mix local.hex --force
     mix local.rebar --force

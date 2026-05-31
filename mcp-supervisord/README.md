@@ -46,7 +46,7 @@ CLI flags:
 ```json
 {
   "bind": "0.0.0.0:9121",
-  "auth": { "token": "${SUPERVISOR_TOKEN}" },
+  "auth": { "token": "..." },
   "log_buffer": 1000,
   "shutdown_grace_seconds": 10,
 
@@ -202,7 +202,6 @@ Add to `.devcontainer/devcontainer.json`:
 
 ```json
 {
-  "containerEnv": { "SUPERVISOR_TOKEN": "dev-only-please-rotate" },
   "forwardPorts": [9121],
   "postCreateCommand": "uv tool install --editable ./mcp-supervisord",
   "postStartCommand": "nohup mcp-supervisord --config /workspaces/flylixir/tools.json > /tmp/supervisord.log 2>&1 &"
