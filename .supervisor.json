@@ -12,7 +12,7 @@
     "serena": {
       "namespace": "serena",
       "command": "serena",
-      "args": ["start-mcp-server", "--context", "ide-assistant", "--project", "/workspaces/app"],
+      "args": ["start-mcp-server", "--context", "desktop-app", "--project", "/workspaces/app"],
       "env": {"PATH": "/home/vscode/.local/bin:/usr/local/bin:/usr/bin:/bin"},
       "cwd": "/workspaces/app",
       "autostart": true,
