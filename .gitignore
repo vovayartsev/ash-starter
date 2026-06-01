@@ -1,4 +1,7 @@
 .serena
 .env
 .expert
+.elixir_ls
 .__pycache
+_build
+deps
