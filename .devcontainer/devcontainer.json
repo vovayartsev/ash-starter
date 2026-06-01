@@ -46,7 +46,6 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "expertlsp.expert"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash"
