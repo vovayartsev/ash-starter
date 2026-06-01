@@ -4,7 +4,7 @@ Project kick-off:
 
 1. ask user for <app_name>  (valid Elxir atom name, not ModuleName)
 
-2.  mix phx.new . --app <app_name> --yes
+2.  mix phx.new . --app <app_name>
 
 3.  add this to mix.exs:
 
