@@ -52,13 +52,18 @@ SUPERVISOR_TOOLS: list[types.Tool] = [
     ),
     types.Tool(
         name="logs",
-        description="Tail recent log lines for target (tool name or bash pid).",
+        description=(
+            "Tail recent log lines for target (tool name or bash pid). "
+            "Buffer holds only the current run; pass previous=true (like `kubectl logs -p`) "
+            "to read the prior run's buffer (named tools / mcp_servers only)."
+        ),
         inputSchema={
             "type": "object",
             "properties": {
                 "target": {"type": ["string", "integer"]},
                 "n": {"type": "integer", "default": 50},
                 "stream": {"type": "string", "enum": ["all", "stdout", "stderr"], "default": "all"},
+                "previous": {"type": "boolean", "default": False},
             },
             "required": ["target"],
         },
@@ -217,10 +222,15 @@ class Supervisor:
                     return self.upstreams[tool].status()
                 return self.manager.status(tool)
             if name == "logs":
-                return self.manager.logs(
-                    args["target"], int(args.get("n", 50)), args.get("stream", "all")
-                ) if not (isinstance(args["target"], str) and args["target"] in self.upstreams) else \
-                    self.upstreams[args["target"]].log.tail(int(args.get("n", 50)), args.get("stream", "all"))
+                target = args["target"]
+                n = int(args.get("n", 50))
+                stream = args.get("stream", "all")
+                previous = bool(args.get("previous", False))
+                if isinstance(target, str) and target in self.upstreams:
+                    up = self.upstreams[target]
+                    buf = up.previous_log if previous else up.log
+                    return [] if buf is None else buf.tail(n, stream)
+                return self.manager.logs(target, n, stream, previous=previous)
             if name == "bash":
                 return await self.manager.bash(
                     args["cmd"],

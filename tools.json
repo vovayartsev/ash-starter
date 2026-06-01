@@ -28,7 +28,7 @@
   "named_tools": {
     "phx.server": {
       "command": "mix phx.server",
-      "cwd": "/workspaces/flylixir",
+      "cwd": "/workspaces/flylixir/flylixir",
       "env": {
         "MIX_ENV": "dev"
       },

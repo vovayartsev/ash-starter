@@ -49,7 +49,9 @@ class UpstreamMCP:
         self.name = name
         self.spec = spec
         self.namespace = spec.namespace
+        self._log_capacity = log_capacity
         self.log = RingBuffer(log_capacity)
+        self.previous_log: RingBuffer | None = None
 
         self.state = "stopped"  # stopped|starting|running|crashed|backoff
         self.pid: int | None = None  # not tracked; stdio_client hides it
@@ -113,6 +115,9 @@ class UpstreamMCP:
         )
         while True:
             self.state = "starting"
+            if len(self.log) > 0:
+                self.previous_log = self.log
+                self.log = RingBuffer(self._log_capacity)
             read_fd, write_fd = os.pipe()
             errlog = os.fdopen(write_fd, "w", buffering=1)
             pump_task = asyncio.create_task(_pump_fd_to_buf(read_fd, self.log))

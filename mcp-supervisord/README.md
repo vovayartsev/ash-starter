@@ -98,7 +98,7 @@ All exposed at `POST /mcp` (Streamable HTTP, MCP 2025‑06 spec).
 | `start` | `tool: str` | `{pid, state}` or `{error: "already running", pid, state}` |
 | `stop` | `tool: str, signal="TERM"` | `{stopped, last_exit_code}` |
 | `status` | `tool?: str` | one entry or full map (see below) |
-| `logs` | `target: str\|int, n=50, stream="all"\|"stdout"\|"stderr"` | `[{time, stream, message, truncated?}, ...]` |
+| `logs` | `target: str\|int, n=50, stream="all"\|"stdout"\|"stderr", previous=false` | `[{time, stream, message, truncated?}, ...]` — buffer is per-run; `previous=true` returns the prior run's buffer (like `kubectl logs -p`), named tools / mcp_servers only. |
 | `bash` | `cmd: str, timeout=30, cwd?, env={}` | `{exit_code, stdout, stderr, duration}` or `{status:"timeout", pid, recent_logs}` |
 | `wait` | `pid: int, timeout=60` | `{exit_code, duration}` or `{status:"timeout"}` |
 | `kill` | `pid: int, signal="TERM"` | `{killed: bool}` |
@@ -176,7 +176,7 @@ From a devcontainer, forward port `9121` to the host (`forwardPorts: [9121]` in 
 
 ## Logs
 
-Each process owns a `collections.deque(maxlen=log_buffer)` of `{time, stream, message, truncated?}` lines (UTC ISO‑8601). Lines >8 KB are truncated and flagged. Buffers are RAM only; nothing is persisted to disk. Bash pid buffers are LRU‑capped at 100.
+Each process owns a `collections.deque(maxlen=log_buffer)` of `{time, stream, message, truncated?}` lines (UTC ISO‑8601). The buffer is **per run**: on each (re)spawn the current buffer is moved to `previous_log` and a fresh one starts. Use `logs(target, previous=true)` to read the prior run (analogous to `kubectl logs -p`). Only one prior run is retained. Lines >8 KB are truncated and flagged. Buffers are RAM only; nothing is persisted to disk. Bash pid buffers are LRU‑capped at 100 and have no `previous` notion.
 
 ---
 

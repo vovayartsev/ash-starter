@@ -74,6 +74,30 @@ async def test_on_failure_does_not_restart_zero_exit():
 
 
 @pytest.mark.asyncio
+async def test_previous_log_holds_prior_run_after_restart():
+    mp = ManagedProcess(
+        name="t",
+        command="sh",
+        args=["-c", "echo run-one; exit 1"],
+        env={},
+        cwd=None,
+        restart_policy=RestartPolicy(
+            mode="on-failure", max_restarts=10, window_seconds=60, backoff_seconds=0.05
+        ),
+        log_capacity=100,
+    )
+    await mp.start()
+    # wait for at least one restart so previous_log is populated
+    deadline = asyncio.get_event_loop().time() + 5.0
+    while asyncio.get_event_loop().time() < deadline and mp.previous_log is None:
+        await asyncio.sleep(0.05)
+    assert mp.previous_log is not None
+    prev_msgs = [l["message"] for l in mp.previous_log.tail(0)]
+    assert any("run-one" in m for m in prev_msgs)
+    await mp.stop(grace=1.0)
+
+
+@pytest.mark.asyncio
 async def test_stop_terminates_running_process():
     mp = ManagedProcess(
         name="t",

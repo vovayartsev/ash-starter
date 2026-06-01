@@ -17,6 +17,8 @@ cd /workspaces/flylixir
 if [ -f mix.exs ]; then
     mix local.hex --force
     mix local.rebar --force
+    mix archive.install hex igniter_new --force
+    mix archive.install hex phx_new 1.8.7 --force
     mix deps.get
 fi
 

@@ -78,12 +78,24 @@ class ProcessManager:
             return {"kind": "named_tool", **mp.status()}
         return {n: {"kind": "named_tool", **mp.status()} for n, mp in self.named.items()}
 
-    def logs(self, target: str | int, n: int = 50, stream: str = "all") -> list[dict]:
-        buf = self._resolve_log_target(target)
+    def logs(
+        self,
+        target: str | int,
+        n: int = 50,
+        stream: str = "all",
+        previous: bool = False,
+    ) -> list[dict]:
+        buf = self._resolve_log_target(target, previous=previous)
+        if buf is None:
+            return []
         return buf.tail(n, stream)  # type: ignore[return-value]
 
-    def _resolve_log_target(self, target: str | int) -> RingBuffer:
+    def _resolve_log_target(
+        self, target: str | int, previous: bool = False
+    ) -> RingBuffer | None:
         if isinstance(target, int):
+            if previous:
+                raise ValueError("previous logs not supported for bash pids")
             if target in self.bash_pids:
                 return self.bash_pids[target].log
             for mp in self.named.values():
@@ -91,7 +103,8 @@ class ProcessManager:
                     return mp.log
             raise KeyError(f"no buffer for pid {target}")
         if target in self.named:
-            return self.named[target].log
+            mp = self.named[target]
+            return mp.previous_log if previous else mp.log
         raise KeyError(f"unknown log target {target!r}")
 
     # --- bash ---

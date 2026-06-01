@@ -44,7 +44,9 @@ class ManagedProcess:
         self.env = env
         self.cwd = cwd
         self.policy = restart_policy
+        self._log_capacity = log_capacity
         self.log = RingBuffer(log_capacity)
+        self.previous_log: RingBuffer | None = None
 
         self.state: State = "stopped"
         self.pid: int | None = None
@@ -130,6 +132,9 @@ class ManagedProcess:
         argv = _build_argv(self.command, self.args)
         env = {**os.environ, **self.env}
         self._exited = asyncio.Event()
+        if len(self.log) > 0:
+            self.previous_log = self.log
+            self.log = RingBuffer(self._log_capacity)
         self._proc = await asyncio.create_subprocess_exec(
             *argv,
             cwd=self.cwd,
