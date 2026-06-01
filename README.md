@@ -18,3 +18,6 @@ mix igniter.install ash,ash_phoenix,ash_postgres,ash_oban,oban_web,tidewave,ash_
 4. change host="host.docker.internal" in ecto config in dev.exs and test.exs
 
 5. add to .gitignore lines from step 0
+
+--- this all takes ~ 5 minutes, tell the user to have some tea ----
+
