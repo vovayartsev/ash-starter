@@ -1,5 +1,5 @@
 {
-  "name": "flylixir",
+  "name": "app",
   "build": {
     "dockerfile": "Dockerfile",
     "context": ".."
@@ -15,17 +15,17 @@
 
   "remoteUser": "vscode",
 
-  "workspaceFolder": "/workspaces/flylixir",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/flylixir,type=bind,consistency=cached",
+  "workspaceFolder": "/workspaces/app",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/app,type=bind,consistency=cached",
 
   "mounts": [
-    "target=/workspaces/flylixir/.claude,type=tmpfs"
+    "target=/workspaces/app/.claude,type=tmpfs"
   ],
 
   "forwardPorts": [4000, 9121, 24282],
   "portsAttributes": {
     "4000": { "label": "Phoenix", "onAutoForward": "notify" },
-    "9121": { "label": "mcp-supervisord", "onAutoForward": "silent" },
+    "9121": { "label": "devcontainer", "onAutoForward": "silent" },
     "24282": { "label": "Serena dashboard", "onAutoForward": "silent" }
   },
 
@@ -40,8 +40,8 @@
     "ghcr.io/devcontainers/features/git:1": {}
   },
 
-  "postCreateCommand": "bash /workspaces/flylixir/.devcontainer-scripts/post-create.sh",
-  "postStartCommand": "bash /workspaces/flylixir/.devcontainer-scripts/post-start.sh",
+  "postCreateCommand": "bash /workspaces/app/.devcontainer-scripts/post-create.sh",
+  "postStartCommand": "bash /workspaces/app/.devcontainer-scripts/post-start.sh",
 
   "customizations": {
     "vscode": {

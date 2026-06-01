@@ -1,4 +1,4 @@
-# Phoenix + Python (for mcp-supervisord & serena via uvx) dev environment.
+# Phoenix + Python (for supervisor-and-mcp-proxy& serena via uvx) dev environment.
 FROM hexpm/elixir:1.17.3-erlang-27.1.2-debian-bookworm-20241016
 
 ENV DEBIAN_FRONTEND=noninteractive \
