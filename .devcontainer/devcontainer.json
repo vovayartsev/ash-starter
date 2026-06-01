@@ -46,10 +46,7 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "JakeBecker.elixir-ls",
-        "phoenixframework.phoenix",
-        "ms-python.python",
-        "charliermarsh.ruff"
+        "expertlsp.expert"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash"
