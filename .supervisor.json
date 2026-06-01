@@ -3,7 +3,7 @@
 
   "bind": "0.0.0.0:9121",
   "auth": {
-    "token": "my-super-token"
+    "token": "<my-super-token>"
   },
   "log_buffer": 1000,
   "shutdown_grace_seconds": 10,
