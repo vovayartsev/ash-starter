@@ -14,7 +14,7 @@
       "command": "serena",
       "args": ["start-mcp-server", "--context", "ide-assistant", "--project", "/workspaces/app"],
       "env": {"PATH": "/home/vscode/.local/bin:/usr/local/bin:/usr/bin:/bin"},
-      "cwd": "/workspaces/flylixir",
+      "cwd": "/workspaces/app",
       "autostart": true,
       "restart_policy": {
         "mode": "on-failure",

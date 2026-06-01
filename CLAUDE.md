@@ -22,5 +22,3 @@ Each `mcp_servers.<ns>` upstream exports its own tools under prefix `<ns>__<orig
 
 Если devcontainer tools не доступны - попроси пользователя запустить VSCode в Devcontainer.
 Не стартуй сам - будут проблемы с пробросом портов или кешем.
-
-phoenix-приложение находится в /workspaces/flylixir/flylixir поэтому `mix test` или `mix ash.*` надо запускать оттуда
